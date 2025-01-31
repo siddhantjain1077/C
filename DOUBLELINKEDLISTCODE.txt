@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    struct node * prev;
+    int data;
+    struct node * next;
+};
+
+void print_list(struct node * head){
+    if(head == NULL){
+        printf("List is empty!");
+    }
+    struct node * temp = head;
+    while(temp != NULL){
+        printf("%d ", temp -> data);
+        temp = temp -> next;
+    }
+    printf("\n");
+}
+
+struct node * add_to_empty(struct node * head, int data){
+    struct node * ptr = malloc(sizeof(struct node));
+    ptr -> prev = NULL;
+    ptr -> next = NULL;
+    ptr -> data = data;
+    head = ptr;
+    return head;
+}
+
+struct node * add_to_beg(struct node * head, int data){
+    struct node * temp, * ptr;
+    temp = head;
+    ptr = malloc(sizeof(struct node));
+    ptr -> prev = NULL;
+    ptr -> next = NULL;
+    ptr -> data = data;
+    ptr -> prev = head;
+    head -> next = ptr;
+    return head;
+}
+
+struct node * add_at_end(struct node * head, int data){
+    struct node * temp, * ptr;
+    temp = head;
+    ptr = malloc(sizeof(struct node));
+    ptr -> prev = NULL;
+    ptr -> next = NULL;
+    ptr -> data = data;
+    while(temp -> next != NULL){
+        temp = temp -> next;
+    }
+    ptr -> prev = temp;
+    temp -> next = ptr;
+    return head;
+}
+
+struct node * add_at_pos(struct node * head, int data, int pos){
+    struct node * ptr, *temp, * temp2;
+    temp = head;
+    ptr = malloc(sizeof(struct node));
+    ptr -> prev = NULL;
+    ptr -> next = NULL;
+    ptr -> data = data;
+
+    pos--;
+    while(pos != 1){
+        temp = temp -> next;
+        pos--;
+    }
+    temp2 = temp -> next;
+    ptr -> prev = temp;
+    temp -> next = ptr;
+    temp2 -> prev = ptr;
+    ptr -> next = temp2;
+    return head;
+}
+
+struct node * del_first(struct node * head){
+    head = head -> next;
+    free(head -> prev);
+    head -> prev = NULL;
+    
+    return head;
+}
+
+struct node * del_last(struct node * head){
+    struct node * temp, *temp2;
+    temp = head;
+    while(temp -> next != NULL){
+        temp = temp -> next;
+    }
+    temp2 = temp -> prev;
+    free(temp2 -> next);
+    temp2 -> next = NULL;
+    return head;
+}
+
+int main(){
+    int data1, data2, data3, data4, pos;
+
+    printf("Enter the first elemts of the list : ");
+    scanf("%d", &data1);
+    printf("Enter the second elemts of the list : ");
+    scanf("%d", &data2);
+    printf("Enter the third elemts of the list : ");
+    scanf("%d", &data3);
+    printf("Enter the fourth elemts of the list : ");
+    scanf("%d", &data4);
+    printf("Enter the position of 4th element : ");
+    scanf("%d", &pos);
+
+    struct node * head = NULL;
+
+    head = add_to_empty(head, data1);
+    print_list(head);
+    head = add_to_beg(head, data2);
+    print_list(head);
+    head = add_at_end(head, data3);
+    print_list(head);
+    head = add_at_pos(head, data4, pos);
+    print_list(head);
+    head = del_first(head);
+    print_list(head);
+    head = del_last(head);
+    print_list(head);
+    head = add_at_end(head, 50);
+    print_list(head);
+}

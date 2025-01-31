@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node * link;
+};
+
+void print_list(struct node * head){
+    struct node * temp = head;
+    if(temp == NULL){
+        printf("Linked List is empty");
+    }
+    while(temp != NULL){
+        printf("%d ", temp -> data);
+        temp = temp -> link;
+    }
+    printf("\n");
+}
+
+struct node * add_beg(struct node * head, int data4){
+    struct node * ptr = malloc(sizeof(struct node));
+    ptr -> data = data4;
+    ptr -> link = NULL;
+
+    ptr -> link = head;
+    head = ptr;
+    return head;
+}
+
+void add_at_pos(int data, int pos,  struct node * head){
+    struct node * ptr = head;
+    struct node * ptr2 = malloc(sizeof(struct node));
+    ptr2 -> data = data;
+    ptr2 -> link = NULL;
+
+    pos--;
+    while(pos != 1){
+        ptr = ptr -> link;
+        pos--;
+    }
+    ptr2 -> link = ptr -> link;
+    ptr -> link = ptr2;
+}
+
+void add_at_end(int data, struct node * head){
+    struct node * ptr, * temp;
+    ptr = head;
+    temp = malloc(sizeof(struct node));
+    temp -> data = data;
+    temp -> link = NULL;
+
+    while(ptr -> link != NULL){
+        ptr = ptr -> link;
+    }
+    ptr -> link = temp;
+}
+
+struct node * del_first(struct node * head){
+    while(head == NULL){
+        printf("List is empty ! ");
+    }
+    if(head != NULL){
+        struct node * temp = head;
+        head = head -> link;
+        free(temp);
+        temp = NULL;
+    }
+    return head;
+}
+
+struct node * del_last(struct node * head){
+    if(head == NULL){
+        printf("List is empty!");
+    }
+    else if(head -> link == NULL){
+        free(head);
+        head = NULL;
+    }
+    else{
+        struct node * temp = head;
+        while(temp -> link -> link != NULL){
+            temp = temp -> link;
+        }
+        free(temp -> link);
+        temp -> link = NULL;
+    }
+    return head;
+}
+
+int main(){
+    int data, data1, data2, data3, data4, pos;
+    
+    printf("Enter the first number of the list : ");
+    scanf("%d", &data1);
+    printf("Enter the second number of the list : ");
+    scanf("%d", &data2);  
+    printf("Enter the third number of the list : ");
+    scanf("%d", &data3);
+    printf("Enter the number to be inserted in the beggining : ");
+    scanf("%d", &data4);    
+    printf("Enter the number to be added at a certain position : ");
+    scanf("%d", & data);
+    printf("enter the position to be entered : ");
+    scanf("%d", &pos);
+
+    struct node * head = malloc(sizeof(struct node));
+    head -> data = data1;
+    head -> link = NULL;
+
+    add_at_end(data2, head);
+    add_at_end(data3, head);
+    head = add_beg(head, data4);
+    add_at_pos(data, pos, head);
+    print_list(head);
+    head = del_first(head);
+    print_list(head);
+    head = del_last(head);
+    print_list(head);
+}
